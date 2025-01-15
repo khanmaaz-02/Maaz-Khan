@@ -1,0 +1,59 @@
+let userScore = 0;
+let compScore = 0;
+
+
+const userScoreDisplay = document.getElementById('user-score').querySelector('p:first-child');
+const compScoreDisplay = document.getElementById('comp-score').querySelector('p:first-child');
+const messageDisplay = document.getElementById('msg');
+
+const choices = document.querySelectorAll('.choice');
+
+choices.forEach(choice => {
+    choice.addEventListener('click', () => {
+        const userChoice = choice.id;
+        const compChoice = getComputerChoice();
+        const result = determineWinner(userChoice, compChoice);
+        updateScores(result);
+        displayMessage(userChoice, compChoice, result);
+    });
+});
+
+function getComputerChoice() {
+    const choices = ['rock', 'paper', 'scissors'];
+    const randomIndex = Math.floor(Math.random() * choices.length);
+    return choices[randomIndex];
+}
+
+function determineWinner(userChoice, compChoice) {
+    if (userChoice === compChoice) {
+        return 'draw';
+    } else if (
+        (userChoice === 'rock' && compChoice === 'scissors') ||
+        (userChoice === 'paper' && compChoice === 'rock') ||
+        (userChoice === 'scissors' && compChoice === 'paper')
+    ) {
+        return 'user';
+    } else {
+        return 'computer';
+    }
+}
+
+function updateScores(result) {
+    if (result === 'user') {
+        userScore++;
+        userScoreDisplay.textContent = userScore;
+    } else if (result === 'computer') {
+        compScore++;
+        compScoreDisplay.textContent = compScore;
+    }
+}
+
+function displayMessage(userChoice, compChoice, result) {
+    if (result === 'draw') {
+        messageDisplay.textContent = `It's a draw! You both chose ${userChoice.toUpperCase()}.`;
+    } else if (result === 'user') {
+        messageDisplay.textContent = `You win! ${userChoice.toUpperCase()} beats ${compChoice.toUpperCase()}.`;
+    } else {
+        messageDisplay.textContent = `You lose! ${compChoice.toUpperCase()} beats ${userChoice.toUpperCase()}.`;
+    }
+}
